@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'corner_margin.dart';
 
 /// Pads [child] by the corner-adaptation insets that apply to the widget's
-/// own rect. After each layout, measures its [RenderBox] against the
+/// own rect. After each frame, measures its [RenderBox] against the
 /// window and, for every edge flush with a window edge, takes the max of
 /// the values from the corners whose quadrants the widget overlaps
 /// (see [CornerInsets.effectiveFor]).
@@ -17,6 +17,12 @@ import 'corner_margin.dart';
 /// Nested safe areas do not double-count: the inner widget is offset by
 /// the outer's padding and therefore measures as non-flush, so it pads by
 /// zero. No inherited-widget consumption required.
+///
+/// Measurements re-run once per frame as long as any frame is being
+/// rendered, so animations that move the widget without rebuilding it
+/// (e.g. `SlideTransition`, `Transform`, `AnimatedBuilder` around a
+/// `Transform`) still produce up-to-date padding by the end of the
+/// animation.
 ///
 /// Set [left] / [right] / [top] / [bottom] to `false` to skip a specific
 /// physical edge even when flush.
@@ -45,9 +51,35 @@ class _CornerAdaptiveSafeAreaState extends State<CornerAdaptiveSafeArea> {
   EdgeInsets _effective = EdgeInsets.zero;
 
   @override
-  Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback(_measure);
+  void initState() {
+    super.initState();
+    _scheduleMeasure();
+  }
 
+  void _scheduleMeasure() {
+    SchedulerBinding.instance.addPostFrameCallback(_measure);
+  }
+
+  void _measure(Duration _) {
+    if (!mounted) return;
+
+    final object = context.findRenderObject();
+    if (object is RenderBox && object.hasSize) {
+      final corners = CornerMargin.of(context);
+      final windowSize = MediaQuery.sizeOf(context);
+      final rect = object.localToGlobal(Offset.zero) & object.size;
+      final next = corners.effectiveFor(rect, windowSize);
+
+      if (next != _effective) {
+        setState(() => _effective = next);
+      }
+    }
+
+    _scheduleMeasure();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final padding = EdgeInsets.fromLTRB(
       widget.left ? _effective.left : 0,
       widget.top ? _effective.top : 0,
@@ -56,19 +88,5 @@ class _CornerAdaptiveSafeAreaState extends State<CornerAdaptiveSafeArea> {
     );
 
     return Padding(padding: padding, child: widget.child);
-  }
-
-  void _measure(Duration _) {
-    if (!mounted) return;
-    final object = context.findRenderObject();
-    if (object is! RenderBox || !object.hasSize) return;
-
-    final corners = CornerMargin.of(context);
-    final windowSize = MediaQuery.sizeOf(context);
-    final rect = object.localToGlobal(Offset.zero) & object.size;
-    final next = corners.effectiveFor(rect, windowSize);
-
-    if (next == _effective) return;
-    setState(() => _effective = next);
   }
 }

@@ -71,4 +71,62 @@ void main() {
 
     expect(received, EdgeInsets.zero);
   });
+
+  testWidgets(
+      're-measures across a render-only animation that does not rebuild the child',
+      (tester) async {
+    final controller = AnimationController(
+      vsync: const TestVSync(),
+      duration: const Duration(milliseconds: 100),
+    );
+    addTearDown(controller.dispose);
+
+    EdgeInsets? received;
+
+    await _pumpWithSurface(
+      tester,
+      Directionality(
+        textDirection: TextDirection.ltr,
+        child: CornerMargin(
+          corners: _fourCorners,
+          child: Stack(
+            children: [
+              AnimatedBuilder(
+                animation: controller,
+                // `child` is hoisted: AnimatedBuilder rebuilds the
+                // Transform every tick, but does NOT rebuild the
+                // CornerAdaptiveBuilder. Position changes come solely
+                // from the Transform's paint matrix.
+                child: CornerAdaptiveBuilder(
+                  builder: (_, insets) {
+                    received = insets;
+                    return const SizedBox(width: 40, height: 40);
+                  },
+                ),
+                builder: (context, child) {
+                  final t = controller.value;
+                  return Transform.translate(
+                    offset: Offset(100 * (1 - t), 100 * (1 - t)),
+                    child: child,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+
+    // At t=0 the widget is translated to (100, 100) — away from every
+    // hazard — so insets resolve to zero.
+    await tester.pump();
+    expect(received, EdgeInsets.zero);
+
+    controller.forward();
+    await tester.pumpAndSettle();
+
+    // At t=1 the widget sits at (0, 0)–(40, 40), overlapping only the
+    // top-left hazard (0, 0, 10, 11).
+    expect(received, const EdgeInsets.fromLTRB(10, 11, 0, 0));
+  });
 }
