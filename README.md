@@ -10,7 +10,7 @@ iOS 26 exposes this per-corner data on every `UIView` via `directionalEdgeInsets
 
 ## Platform support
 
-iOS 26.0 or later. The package compiles on every Flutter platform, but on anything other than iOS 26+ (other OS versions, other platforms, tests without a platform stub) all values are reported as `CornerInsets.zero` and the widgets become effectively no-ops. Android, macOS, web, Windows, and Linux are not implemented.
+iOS 13.0 or later for installation. The corner-adaptation margins API is iOS 26.0+, so corner values only populate on iOS 26+ devices. On iOS 13.0–25.x, other platforms, and tests without a platform stub, every value is reported as `CornerInsets.zero` and the widgets become effectively no-ops — safe to ship in apps that still support older iOS versions. Android, macOS, web, Windows, and Linux are not implemented.
 
 ## Installation
 
@@ -18,7 +18,7 @@ iOS 26.0 or later. The package compiles on every Flutter platform, but on anythi
 flutter pub add corner_adaptive_safe_area
 ```
 
-Your iOS deployment target must be `26.0` or higher (set in `ios/Podfile` and the Runner target).
+Your iOS deployment target must be `13.0` or higher (set in `ios/Podfile` and the Runner target). Corner-adaptation values only populate on iOS 26.0+; on earlier iOS versions the widgets render as no-ops.
 
 ## Setup
 
@@ -221,7 +221,7 @@ See the `test/` directory for worked examples.
 
 ## Limitations
 
-- iOS 26.0+ only. On any other version or platform, `CornerInsets.zero` is reported and the widgets pad by zero.
+- Installs on iOS 13.0+, but corner values only report on iOS 26.0+. On iOS 13.0–25.x and non-iOS platforms, `CornerInsets.zero` is reported and the widgets pad by zero.
 - No Android, macOS, web, Windows, or Linux implementations.
 - `CornerAdaptiveSafeArea` and `CornerAdaptiveBuilder` measure post-layout, so the first frame after a size change may render with stale (or zero) insets before the next frame corrects it.
 
