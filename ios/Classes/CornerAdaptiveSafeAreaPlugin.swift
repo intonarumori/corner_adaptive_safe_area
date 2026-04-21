@@ -10,15 +10,15 @@ import UIKit
 // travel through one event channel as `{topLeft, topRight, bottomLeft,
 // bottomRight}` so Flutter widgets can reason about each corner
 // independently.
-public class CornerMarginIosPlugin: NSObject, FlutterPlugin {
+public class CornerAdaptiveSafeAreaPlugin: NSObject, FlutterPlugin {
 
-  private static let methodChannelName = "corner_margin_ios"
-  private static let eventChannelName = "corner_margin_ios/insets"
+  private static let methodChannelName = "corner_adaptive_safe_area"
+  private static let eventChannelName = "corner_adaptive_safe_area/insets"
 
   private let streamHandler = InsetsStreamHandler()
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let instance = CornerMarginIosPlugin()
+    let instance = CornerAdaptiveSafeAreaPlugin()
 
     let methodChannel = FlutterMethodChannel(
       name: methodChannelName,

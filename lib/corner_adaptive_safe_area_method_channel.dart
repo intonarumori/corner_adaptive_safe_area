@@ -1,16 +1,18 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
-import 'corner_margin_ios_platform_interface.dart';
+import 'corner_adaptive_safe_area_platform_interface.dart';
 import 'src/corner_insets.dart';
 
-class MethodChannelCornerMarginIos extends CornerMarginIosPlatform {
+class MethodChannelCornerAdaptiveSafeArea
+    extends CornerAdaptiveSafeAreaPlatform {
   @visibleForTesting
-  final MethodChannel methodChannel = const MethodChannel('corner_margin_ios');
+  final MethodChannel methodChannel =
+      const MethodChannel('corner_adaptive_safe_area');
 
   @visibleForTesting
   final EventChannel eventChannel =
-      const EventChannel('corner_margin_ios/insets');
+      const EventChannel('corner_adaptive_safe_area/insets');
 
   Stream<CornerInsets>? _stream;
 

@@ -3,7 +3,7 @@ import UIKit
 import XCTest
 
 
-@testable import corner_margin_ios
+@testable import corner_adaptive_safe_area
 
 // This demonstrates a simple unit test of the Swift portion of this plugin's implementation.
 //
@@ -12,7 +12,7 @@ import XCTest
 class RunnerTests: XCTestCase {
 
   func testGetPlatformVersion() {
-    let plugin = CornerMarginIosPlugin()
+    let plugin = CornerAdaptiveSafeAreaPlugin()
 
     let call = FlutterMethodCall(methodName: "getPlatformVersion", arguments: [])
 

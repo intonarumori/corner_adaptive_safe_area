@@ -1,18 +1,19 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'corner_margin_ios_method_channel.dart';
+import 'corner_adaptive_safe_area_method_channel.dart';
 import 'src/corner_insets.dart';
 
-abstract class CornerMarginIosPlatform extends PlatformInterface {
-  CornerMarginIosPlatform() : super(token: _token);
+abstract class CornerAdaptiveSafeAreaPlatform extends PlatformInterface {
+  CornerAdaptiveSafeAreaPlatform() : super(token: _token);
 
   static final Object _token = Object();
 
-  static CornerMarginIosPlatform _instance = MethodChannelCornerMarginIos();
+  static CornerAdaptiveSafeAreaPlatform _instance =
+      MethodChannelCornerAdaptiveSafeArea();
 
-  static CornerMarginIosPlatform get instance => _instance;
+  static CornerAdaptiveSafeAreaPlatform get instance => _instance;
 
-  static set instance(CornerMarginIosPlatform instance) {
+  static set instance(CornerAdaptiveSafeAreaPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }

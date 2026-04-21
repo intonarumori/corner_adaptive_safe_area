@@ -1,5 +1,5 @@
-name: corner_margin_ios
-description: "A new Flutter plugin project."
+name: corner_adaptive_safe_area
+description: "Per-corner safe-area insets from iOS 26's UIView cornerAdaptation API, exposed as Flutter widgets."
 version: 0.0.1
 homepage:
 
@@ -35,7 +35,7 @@ flutter:
   plugin:
     platforms:
       ios:
-        pluginClass: CornerMarginIosPlugin
+        pluginClass: CornerAdaptiveSafeAreaPlugin
 
   # To add assets to your plugin package, add an assets section, like this:
   # assets:

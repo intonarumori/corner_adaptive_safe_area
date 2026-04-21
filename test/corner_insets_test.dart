@@ -1,4 +1,4 @@
-import 'package:corner_margin_ios/corner_margin_ios.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 

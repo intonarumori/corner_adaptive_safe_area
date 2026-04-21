@@ -1,5 +1,5 @@
-import 'package:corner_margin_ios/corner_margin_ios.dart';
-import 'package:corner_margin_ios/corner_margin_ios_method_channel.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area_method_channel.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,8 +14,8 @@ Map<String, double> _encode(EdgeInsets e) => {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  final platform = MethodChannelCornerMarginIos();
-  const methodChannel = MethodChannel('corner_margin_ios');
+  final platform = MethodChannelCornerAdaptiveSafeArea();
+  const methodChannel = MethodChannel('corner_adaptive_safe_area');
 
   tearDown(() {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
@@ -59,7 +59,7 @@ void main() {
   });
 
   test('watchInsets parses a broadcast event', () async {
-    const channelName = 'corner_margin_ios/insets';
+    const channelName = 'corner_adaptive_safe_area/insets';
     final messenger =
         TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
 

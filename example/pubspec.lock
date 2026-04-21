@@ -41,7 +41,7 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
-  corner_margin_ios:
+  corner_adaptive_safe_area:
     dependency: "direct main"
     description:
       path: ".."

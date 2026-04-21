@@ -1,9 +1,9 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint corner_margin_ios.podspec` to validate before publishing.
+# Run `pod lib lint corner_adaptive_safe_area.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'corner_margin_ios'
+  s.name             = 'corner_adaptive_safe_area'
   s.version          = '0.0.1'
   s.summary          = 'Bridges iOS 26 corner adaptation margins to Flutter.'
   s.description      = <<-DESC
@@ -26,5 +26,5 @@ widgets can avoid floating-window controls and rounded display corners.
   # required reason APIs, update the PrivacyInfo.xcprivacy file to describe your
   # plugin's privacy impact, and then uncomment this line. For more information,
   # see https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
-  # s.resource_bundles = {'corner_margin_ios_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
+  # s.resource_bundles = {'corner_adaptive_safe_area_privacy' => ['Resources/PrivacyInfo.xcprivacy']}
 end

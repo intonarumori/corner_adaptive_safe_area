@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 
-import '../corner_margin_ios_platform_interface.dart';
+import '../corner_adaptive_safe_area_platform_interface.dart';
 import 'corner_insets.dart';
 import 'corner_margin.dart';
 
@@ -22,8 +22,8 @@ class CornerMarginScope extends StatefulWidget {
   final Widget child;
 
   /// Injectable for tests. Defaults to
-  /// [CornerMarginIosPlatform.instance].
-  final CornerMarginIosPlatform? platform;
+  /// [CornerAdaptiveSafeAreaPlatform.instance].
+  final CornerAdaptiveSafeAreaPlatform? platform;
 
   @override
   State<CornerMarginScope> createState() => _CornerMarginScopeState();
@@ -33,8 +33,8 @@ class _CornerMarginScopeState extends State<CornerMarginScope> {
   late StreamSubscription<CornerInsets> _subscription;
   CornerInsets _corners = CornerInsets.zero;
 
-  CornerMarginIosPlatform get _platform =>
-      widget.platform ?? CornerMarginIosPlatform.instance;
+  CornerAdaptiveSafeAreaPlatform get _platform =>
+      widget.platform ?? CornerAdaptiveSafeAreaPlatform.instance;
 
   @override
   void initState() {

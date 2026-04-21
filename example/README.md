@@ -1,6 +1,6 @@
-# corner_margin_ios_example
+# corner_adaptive_safe_area_example
 
-Demonstrates how to use the corner_margin_ios plugin.
+Demonstrates how to use the corner_adaptive_safe_area plugin.
 
 ## Getting Started
 

@@ -1,5 +1,5 @@
-import 'package:corner_margin_ios/corner_margin_ios.dart';
-import 'package:corner_margin_ios_example/main.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area.dart';
+import 'package:corner_adaptive_safe_area_example/main.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

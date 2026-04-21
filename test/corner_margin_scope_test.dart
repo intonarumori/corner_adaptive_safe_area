@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:corner_margin_ios/corner_margin_ios.dart';
-import 'package:corner_margin_ios/corner_margin_ios_platform_interface.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area.dart';
+import 'package:corner_adaptive_safe_area/corner_adaptive_safe_area_platform_interface.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 class _FakePlatform
     with MockPlatformInterfaceMixin
-    implements CornerMarginIosPlatform {
+    implements CornerAdaptiveSafeAreaPlatform {
   final _controller = StreamController<CornerInsets>.broadcast();
 
   @override
