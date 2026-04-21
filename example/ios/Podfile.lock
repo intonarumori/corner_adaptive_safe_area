@@ -1,25 +1,25 @@
 PODS:
-  - corner_margin_ios (0.0.1):
+  - corner_adaptive_safe_area (0.0.1):
     - Flutter
   - Flutter (1.0.0)
   - integration_test (0.0.1):
     - Flutter
 
 DEPENDENCIES:
-  - corner_margin_ios (from `.symlinks/plugins/corner_margin_ios/ios`)
+  - corner_adaptive_safe_area (from `.symlinks/plugins/corner_adaptive_safe_area/ios`)
   - Flutter (from `Flutter`)
   - integration_test (from `.symlinks/plugins/integration_test/ios`)
 
 EXTERNAL SOURCES:
-  corner_margin_ios:
-    :path: ".symlinks/plugins/corner_margin_ios/ios"
+  corner_adaptive_safe_area:
+    :path: ".symlinks/plugins/corner_adaptive_safe_area/ios"
   Flutter:
     :path: Flutter
   integration_test:
     :path: ".symlinks/plugins/integration_test/ios"
 
 SPEC CHECKSUMS:
-  corner_margin_ios: edc97482cefa00fc11fd4cc9aa486e456f4a5e95
+  corner_adaptive_safe_area: 9ef92108817dbcd0c2829db0e63c9d8372390fcb
   Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
   integration_test: 4a889634ef21a45d28d50d622cf412dc6d9f586e
 
