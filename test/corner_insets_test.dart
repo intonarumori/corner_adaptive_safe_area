@@ -11,50 +11,48 @@ void main() {
     bottomRight: EdgeInsets.fromLTRB(0, 0, 16, 17),
   );
 
-  test('widget flush on all edges takes the max of neighbouring corners', () {
-    final rect = Offset.zero & window;
-    final effective = corners.effectiveFor(rect, window);
-    expect(
-      effective,
-      const EdgeInsets.fromLTRB(
-        14, // max(topLeft.left=10, bottomLeft.left=14)
-        12, // max(topLeft.top=11, topRight.top=12)
-        16, // max(topRight.right=13, bottomRight.right=16)
-        17, // max(bottomLeft.bottom=15, bottomRight.bottom=17)
-      ),
-    );
+  test('rect covering the whole window intersects every hazard', () {
+    final effective = corners.effectiveFor(Offset.zero & window, window);
+    expect(effective, const EdgeInsets.fromLTRB(14, 12, 16, 17));
   });
 
-  test('widget centered away from edges yields zero', () {
-    final rect =
-        const Rect.fromLTWH(150, 120, 50, 50); // well inside the window
+  test('rect inside the top-left quadrant but beyond the hazard yields zero', () {
+    // topLeft hazard is (0, 0, 10, 11); rect starts past it.
+    const rect = Rect.fromLTWH(20, 20, 50, 50);
     expect(corners.effectiveFor(rect, window), EdgeInsets.zero);
   });
 
-  test('widget flush top-left only pulls from topLeft corner', () {
-    final rect = const Rect.fromLTWH(0, 0, 50, 50);
-    final effective = corners.effectiveFor(rect, window);
-    expect(effective, const EdgeInsets.fromLTRB(10, 11, 0, 0));
-  });
-
-  test('widget spanning top edge picks max of top-left and top-right', () {
-    final rect = const Rect.fromLTWH(0, 0, 400, 40);
-    final effective = corners.effectiveFor(rect, window);
+  test('rect overlapping the top-left hazard pulls topLeft only', () {
+    const rect = Rect.fromLTWH(0, 0, 50, 50);
     expect(
-      effective,
-      const EdgeInsets.fromLTRB(
-        10, // topLeft.left (bottomLeft doesn't contribute, bottom not flush)
-        12, // max(topLeft.top, topRight.top)
-        13, // topRight.right
-        0,
-      ),
+      corners.effectiveFor(rect, window),
+      const EdgeInsets.fromLTRB(10, 11, 0, 0),
     );
   });
 
-  test('widget flush bottom-right only pulls from bottomRight corner', () {
-    final rect =
-        Rect.fromLTWH(window.width - 50, window.height - 40, 50, 40);
-    final effective = corners.effectiveFor(rect, window);
-    expect(effective, const EdgeInsets.fromLTRB(0, 0, 16, 17));
+  test('rect spanning the top edge intersects topLeft + topRight hazards', () {
+    const rect = Rect.fromLTWH(0, 0, 400, 20);
+    expect(
+      corners.effectiveFor(rect, window),
+      const EdgeInsets.fromLTRB(10, 12, 13, 0),
+    );
+  });
+
+  test('rect in the centre that misses every hazard yields zero', () {
+    const rect = Rect.fromLTWH(50, 50, 300, 200);
+    expect(corners.effectiveFor(rect, window), EdgeInsets.zero);
+  });
+
+  test('rect reaching the bottom-right hazard pulls bottomRight only', () {
+    final rect = Rect.fromLTWH(window.width - 40, window.height - 40, 40, 40);
+    expect(
+      corners.effectiveFor(rect, window),
+      const EdgeInsets.fromLTRB(0, 0, 16, 17),
+    );
+  });
+
+  test('zero-area hazards contribute nothing', () {
+    const zero = CornerInsets.zero;
+    expect(zero.effectiveFor(Offset.zero & window, window), EdgeInsets.zero);
   });
 }

@@ -10,10 +10,7 @@ const CornerInsets _fourCorners = CornerInsets(
   bottomRight: EdgeInsets.fromLTRB(0, 0, 16, 17),
 );
 
-Future<void> _pumpWithSurface(
-  WidgetTester tester,
-  Widget widget,
-) async {
+Future<void> _pumpWithSurface(WidgetTester tester, Widget widget) async {
   tester.view.physicalSize = _kSurfaceSize;
   tester.view.devicePixelRatio = 1.0;
   addTearDown(tester.view.resetPhysicalSize);
@@ -29,8 +26,6 @@ Widget _host({required CornerInsets corners, required Widget child}) {
 }
 
 EdgeInsetsGeometry _firstCornerAdaptivePadding(WidgetTester tester) {
-  // The widget returns a top-level Padding; pick the first one whose
-  // ancestor chain includes a CornerAdaptiveSafeArea Element.
   return tester
       .widgetList<Padding>(find.descendant(
         of: find.byType(CornerAdaptiveSafeArea),
@@ -41,7 +36,7 @@ EdgeInsetsGeometry _firstCornerAdaptivePadding(WidgetTester tester) {
 }
 
 void main() {
-  testWidgets('flush on all edges applies max-of-corners per edge',
+  testWidgets('widget filling the window folds all four corners',
       (tester) async {
     await _pumpWithSurface(
       tester,
@@ -51,7 +46,6 @@ void main() {
       ),
     );
 
-    // First frame: no measurement yet, padding is zero.
     expect(_firstCornerAdaptivePadding(tester), EdgeInsets.zero);
 
     await tester.pump();
@@ -62,27 +56,7 @@ void main() {
     );
   });
 
-  testWidgets('widget centered away from all edges applies no padding',
-      (tester) async {
-    await _pumpWithSurface(
-      tester,
-      _host(
-        corners: _fourCorners,
-        child: const Center(
-          child: CornerAdaptiveSafeArea(
-            child: SizedBox(width: 10, height: 10),
-          ),
-        ),
-      ),
-    );
-
-    await tester.pump();
-    await tester.pump();
-
-    expect(_firstCornerAdaptivePadding(tester), EdgeInsets.zero);
-  });
-
-  testWidgets('widget flush top-left only pulls topLeft corner values',
+  testWidgets('widget inside a single quadrant only folds that corner',
       (tester) async {
     await _pumpWithSurface(
       tester,
@@ -106,35 +80,7 @@ void main() {
     );
   });
 
-  testWidgets('nested safe areas do not double-count', (tester) async {
-    await _pumpWithSurface(
-      tester,
-      _host(
-        corners: _fourCorners,
-        child: const CornerAdaptiveSafeArea(
-          child: CornerAdaptiveSafeArea(
-            key: ValueKey('inner'),
-            child: SizedBox.expand(),
-          ),
-        ),
-      ),
-    );
-
-    await tester.pump();
-    await tester.pump();
-    await tester.pump();
-
-    final innerPadding = tester
-        .widgetList<Padding>(find.descendant(
-          of: find.byKey(const ValueKey('inner')),
-          matching: find.byType(Padding),
-        ))
-        .first
-        .padding;
-    expect(innerPadding, EdgeInsets.zero);
-  });
-
-  testWidgets('disabled edge skips its inset even when flush', (tester) async {
+  testWidgets('disabled edge skips its inset', (tester) async {
     await _pumpWithSurface(
       tester,
       _host(

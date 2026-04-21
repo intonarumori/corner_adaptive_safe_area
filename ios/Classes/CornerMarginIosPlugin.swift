@@ -190,6 +190,17 @@ final class InsetsStreamHandler: NSObject, FlutterStreamHandler {
 
     NSLayoutConstraint.activate(Self.constraints(for: quadrantViews, in: root))
     attachedRoot = root
+
+    // iPadOS layout evolves across multiple passes after insertion; the
+    // quadrant views' own bounds settle early but parent-driven inputs to
+    // `.margins(cornerAdaptation:)` can keep changing. Force a layout pass
+    // and re-read on the next runloop so the post-settlement snapshot isn't
+    // missed.
+    DispatchQueue.main.async { [weak self] in
+      self?.attachedRoot?.layoutIfNeeded()
+      self?.emitIfChanged(force: false)
+    }
+
     return true
   }
 
@@ -259,6 +270,25 @@ private final class LayoutObserverView: UIView {
 
   override func layoutSubviews() {
     super.layoutSubviews()
+    onLayout?()
+  }
+
+  // `.margins(cornerAdaptation:)` derives from safeAreaInsets and
+  // layoutMargins. Those can change on iPadOS (rotation, Stage Manager,
+  // Split View) without the quadrant view's own bounds changing, so
+  // layoutSubviews alone misses the post-settlement update.
+  override func safeAreaInsetsDidChange() {
+    super.safeAreaInsetsDidChange()
+    onLayout?()
+  }
+
+  override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    onLayout?()
+  }
+
+  override func didMoveToWindow() {
+    super.didMoveToWindow()
     onLayout?()
   }
 

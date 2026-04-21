@@ -22,77 +22,48 @@ class DemoPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CornerAdaptiveBuilder(
-      builder: (context, insets) {
-        // Only reserve AppBar leading space for a real hazard, not the
-        // baseline iPad readable-content margin.
-        final left = insets.left;
-        return Scaffold(
-          backgroundColor: const Color(0xFF101217),
-          appBar: AppBar(
-            title: const Text('CornerAdaptiveSafeArea Demo'),
-            leadingWidth: left + 50,
-            toolbarHeight: 44,
-            leading: Container(
-              color: Colors.blue,
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: Container(color: Colors.green, width: 50, height: 50),
-              ),
+    return Scaffold(
+      backgroundColor: const Color(0xFF101217),
+      body: Column(
+        children: [
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.green)),
+                ),
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.red)),
+                ),
+              ],
             ),
           ),
-          body: Stack(
-            children: [
-              CornerAdaptiveSafeArea(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    _DemoButton(label: 'Back', color: Colors.amber),
-                    _DemoButton(label: 'Title', color: Colors.teal),
-                    _DemoButton(label: 'Close', color: Colors.pinkAccent),
-                  ],
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.brown)),
                 ),
-              ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: Padding(padding: EdgeInsets.all(16), child: _InsetsReadout()),
-              ),
-            ],
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.teal)),
+                ),
+              ],
+            ),
           ),
-        );
-      },
-    );
-  }
-}
-
-class _DemoButton extends StatelessWidget {
-  const _DemoButton({required this.label, required this.color});
-
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(12)),
-      child: Text(
-        label,
-        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          Expanded(
+            child: Row(
+              children: [
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.blue)),
+                ),
+                Expanded(
+                  child: CornerAdaptiveSafeArea(child: Container(color: Colors.orange)),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-    );
-  }
-}
-
-class _InsetsReadout extends StatelessWidget {
-  const _InsetsReadout();
-
-  @override
-  Widget build(BuildContext context) {
-    final insets = CornerMargin.of(context);
-    return DefaultTextStyle(
-      style: const TextStyle(color: Colors.white70, fontSize: 12),
-      child: Text('root insets: $insets'),
     );
   }
 }

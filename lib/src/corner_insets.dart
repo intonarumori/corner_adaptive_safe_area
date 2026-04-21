@@ -23,50 +23,49 @@ class CornerInsets {
   static const CornerInsets zero = CornerInsets();
 
   /// Computes the effective [EdgeInsets] for a widget occupying [rect]
-  /// inside a window of size [windowSize]. For each edge of [rect] that is
-  /// flush with the matching window edge (within [epsilon]), takes the max
-  /// of the values from every corner whose quadrant [rect] overlaps.
+  /// inside a window of size [windowSize].
   ///
-  /// Edges not flush with the window, and corners the rect doesn't reach,
-  /// contribute nothing. A widget centred away from all edges receives
-  /// [EdgeInsets.zero].
-  EdgeInsets effectiveFor(
-    Rect rect,
-    Size windowSize, {
-    double epsilon = 0.5,
-  }) {
-    final flushLeft = rect.left.abs() <= epsilon;
-    final flushTop = rect.top.abs() <= epsilon;
-    final flushRight = (rect.right - windowSize.width).abs() <= epsilon;
-    final flushBottom = (rect.bottom - windowSize.height).abs() <= epsilon;
-
-    final halfW = windowSize.width / 2;
-    final halfH = windowSize.height / 2;
-    final touchesTopLeft = rect.left < halfW && rect.top < halfH;
-    final touchesTopRight = rect.right > halfW && rect.top < halfH;
-    final touchesBottomLeft = rect.left < halfW && rect.bottom > halfH;
-    final touchesBottomRight = rect.right > halfW && rect.bottom > halfH;
-
+  /// For each corner, constructs the hazard rectangle the corner's insets
+  /// define (e.g. `Rect.fromLTWH(0, 0, topLeft.left, topLeft.top)`). If
+  /// that hazard rect overlaps [rect], folds the corner's two
+  /// adjacent-edge values into the result via `max`. A corner whose
+  /// insets are zero has a zero-area hazard that overlaps nothing, so it
+  /// drops out.
+  EdgeInsets effectiveFor(Rect rect, Size windowSize) {
     double left = 0;
-    if (flushLeft) {
-      if (touchesTopLeft) left = math.max(left, topLeft.left);
-      if (touchesBottomLeft) left = math.max(left, bottomLeft.left);
-    }
     double top = 0;
-    if (flushTop) {
-      if (touchesTopLeft) top = math.max(top, topLeft.top);
-      if (touchesTopRight) top = math.max(top, topRight.top);
-    }
     double right = 0;
-    if (flushRight) {
-      if (touchesTopRight) right = math.max(right, topRight.right);
-      if (touchesBottomRight) right = math.max(right, bottomRight.right);
-    }
     double bottom = 0;
-    if (flushBottom) {
-      if (touchesBottomLeft) bottom = math.max(bottom, bottomLeft.bottom);
-      if (touchesBottomRight) bottom = math.max(bottom, bottomRight.bottom);
+
+    final topLeftHazard = Rect.fromLTWH(0, 0, topLeft.left, topLeft.top);
+    if (topLeftHazard.overlaps(rect)) {
+      left = math.max(left, topLeft.left);
+      top = math.max(top, topLeft.top);
     }
+
+    final topRightHazard = Rect.fromLTWH(windowSize.width - topRight.right, 0, topRight.right, topRight.top);
+    if (topRightHazard.overlaps(rect)) {
+      top = math.max(top, topRight.top);
+      right = math.max(right, topRight.right);
+    }
+
+    final bottomLeftHazard = Rect.fromLTWH(0, windowSize.height - bottomLeft.bottom, bottomLeft.left, bottomLeft.bottom);
+    if (bottomLeftHazard.overlaps(rect)) {
+      left = math.max(left, bottomLeft.left);
+      bottom = math.max(bottom, bottomLeft.bottom);
+    }
+
+    final bottomRightHazard = Rect.fromLTWH(
+      windowSize.width - bottomRight.right,
+      windowSize.height - bottomRight.bottom,
+      bottomRight.right,
+      bottomRight.bottom,
+    );
+    if (bottomRightHazard.overlaps(rect)) {
+      right = math.max(right, bottomRight.right);
+      bottom = math.max(bottom, bottomRight.bottom);
+    }
+
     return EdgeInsets.fromLTRB(left, top, right, bottom);
   }
 
