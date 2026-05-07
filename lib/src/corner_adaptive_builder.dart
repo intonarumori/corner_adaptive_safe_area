@@ -5,10 +5,8 @@ import 'corner_margin.dart';
 
 /// Signature for [CornerAdaptiveBuilder.builder]: receives the effective
 /// corner-adaptation [EdgeInsets] for the widget's own rect.
-typedef CornerAdaptiveWidgetBuilder = Widget Function(
-  BuildContext context,
-  EdgeInsets insets,
-);
+typedef CornerAdaptiveWidgetBuilder =
+    Widget Function(BuildContext context, EdgeInsets insets);
 
 /// Invokes [builder] with the effective corner-adaptation [EdgeInsets] for
 /// its own rect. After each frame, measures the widget's [RenderBox]

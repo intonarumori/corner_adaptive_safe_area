@@ -1,7 +1,7 @@
 import Flutter
 import UIKit
 
-// Bridges iOS 26 corner-adaptation margins to Flutter by installing four
+// Bridges iPadOS 26 corner-adaptation margins to Flutter by installing four
 // invisible quadrant views in the Flutter root view, each pinned via Auto
 // Layout to cover one quarter of the window (aligned to its corner, sized
 // at 50% × 50%). Each quadrant's `directionalEdgeInsets(for: .margins(
@@ -105,6 +105,12 @@ enum InsetsResolver {
     }
     return nil
   }
+
+  static var supportsCornerInsets: Bool {
+    guard UIDevice.current.userInterfaceIdiom == .pad else { return false }
+    if #available(iOS 26.0, *) { return true }
+    return false
+  }
 }
 
 // Owns the four quadrant observer views and forwards insets whenever any
@@ -118,6 +124,11 @@ final class InsetsStreamHandler: NSObject, FlutterStreamHandler {
 
   func onListen(withArguments arguments: Any?, eventSink events: @escaping FlutterEventSink) -> FlutterError? {
     sink = events
+    guard InsetsResolver.supportsCornerInsets else {
+      emitIfChanged(force: true)
+      return nil
+    }
+
     attachWithRetry(remainingAttempts: 10)
     emitIfChanged(force: true)
     NotificationCenter.default.addObserver(
@@ -152,6 +163,8 @@ final class InsetsStreamHandler: NSObject, FlutterStreamHandler {
   }
 
   func snapshot() -> CornerInsetsSnapshot {
+    guard InsetsResolver.supportsCornerInsets else { return .zero }
+
     if #available(iOS 26.0, *) {
       var insets: [Corner: NSDirectionalEdgeInsets] = [:]
       for (corner, view) in quadrantViews {
@@ -163,6 +176,7 @@ final class InsetsStreamHandler: NSObject, FlutterStreamHandler {
       }
       return CornerInsetsSnapshot(insets: insets)
     }
+
     return .zero
   }
 

@@ -16,11 +16,14 @@ void main() {
     expect(effective, const EdgeInsets.fromLTRB(14, 12, 16, 17));
   });
 
-  test('rect inside the top-left quadrant but beyond the hazard yields zero', () {
-    // topLeft hazard is (0, 0, 10, 11); rect starts past it.
-    const rect = Rect.fromLTWH(20, 20, 50, 50);
-    expect(corners.effectiveFor(rect, window), EdgeInsets.zero);
-  });
+  test(
+    'rect inside the top-left quadrant but beyond the hazard yields zero',
+    () {
+      // topLeft hazard is (0, 0, 10, 11); rect starts past it.
+      const rect = Rect.fromLTWH(20, 20, 50, 50);
+      expect(corners.effectiveFor(rect, window), EdgeInsets.zero);
+    },
+  );
 
   test('rect overlapping the top-left hazard pulls topLeft only', () {
     const rect = Rect.fromLTWH(0, 0, 50, 50);

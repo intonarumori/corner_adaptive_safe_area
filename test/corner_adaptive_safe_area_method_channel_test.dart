@@ -5,11 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Map<String, double> _encode(EdgeInsets e) => {
-      'top': e.top,
-      'leading': e.left,
-      'trailing': e.right,
-      'bottom': e.bottom,
-    };
+  'top': e.top,
+  'leading': e.left,
+  'trailing': e.right,
+  'bottom': e.bottom,
+};
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -32,13 +32,13 @@ void main() {
   test('getInsets parses a four-corner payload', () async {
     TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
         .setMockMethodCallHandler(methodChannel, (call) async {
-      return <String, Map<String, double>>{
-        'topLeft': _encode(const EdgeInsets.fromLTRB(10, 11, 0, 0)),
-        'topRight': _encode(const EdgeInsets.fromLTRB(0, 12, 13, 0)),
-        'bottomLeft': _encode(const EdgeInsets.fromLTRB(14, 0, 0, 15)),
-        'bottomRight': _encode(const EdgeInsets.fromLTRB(0, 0, 16, 17)),
-      };
-    });
+          return <String, Map<String, double>>{
+            'topLeft': _encode(const EdgeInsets.fromLTRB(10, 11, 0, 0)),
+            'topRight': _encode(const EdgeInsets.fromLTRB(0, 12, 13, 0)),
+            'bottomLeft': _encode(const EdgeInsets.fromLTRB(14, 0, 0, 15)),
+            'bottomRight': _encode(const EdgeInsets.fromLTRB(0, 0, 16, 17)),
+          };
+        });
 
     expect(
       await platform.getInsets(),

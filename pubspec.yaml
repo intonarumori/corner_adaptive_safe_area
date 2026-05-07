@@ -1,5 +1,5 @@
 name: corner_adaptive_safe_area
-description: "Per-corner safe-area insets from iOS 26's UIView cornerAdaptation API, exposed as Flutter widgets."
+description: "Per-corner safe-area insets from iPadOS 26's UIView cornerAdaptation API, exposed as Flutter widgets."
 version: 0.0.1
 homepage:
 

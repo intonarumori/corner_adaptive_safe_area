@@ -43,13 +43,23 @@ class CornerInsets {
       top = math.max(top, topLeft.top);
     }
 
-    final topRightHazard = Rect.fromLTWH(windowSize.width - topRight.right, 0, topRight.right, topRight.top);
+    final topRightHazard = Rect.fromLTWH(
+      windowSize.width - topRight.right,
+      0,
+      topRight.right,
+      topRight.top,
+    );
     if (topRightHazard.overlaps(rect)) {
       top = math.max(top, topRight.top);
       right = math.max(right, topRight.right);
     }
 
-    final bottomLeftHazard = Rect.fromLTWH(0, windowSize.height - bottomLeft.bottom, bottomLeft.left, bottomLeft.bottom);
+    final bottomLeftHazard = Rect.fromLTWH(
+      0,
+      windowSize.height - bottomLeft.bottom,
+      bottomLeft.left,
+      bottomLeft.bottom,
+    );
     if (bottomLeftHazard.overlaps(rect)) {
       left = math.max(left, bottomLeft.left);
       bottom = math.max(bottom, bottomLeft.bottom);

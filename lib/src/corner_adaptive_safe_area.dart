@@ -43,8 +43,7 @@ class CornerAdaptiveSafeArea extends StatefulWidget {
   final bool bottom;
 
   @override
-  State<CornerAdaptiveSafeArea> createState() =>
-      _CornerAdaptiveSafeAreaState();
+  State<CornerAdaptiveSafeArea> createState() => _CornerAdaptiveSafeAreaState();
 }
 
 class _CornerAdaptiveSafeAreaState extends State<CornerAdaptiveSafeArea> {

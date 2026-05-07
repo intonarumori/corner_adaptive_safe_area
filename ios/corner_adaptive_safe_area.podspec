@@ -5,10 +5,10 @@
 Pod::Spec.new do |s|
   s.name             = 'corner_adaptive_safe_area'
   s.version          = '0.0.1'
-  s.summary          = 'Bridges iOS 26 corner adaptation margins to Flutter.'
+  s.summary          = 'Bridges iPadOS 26 corner adaptation margins to Flutter.'
   s.description      = <<-DESC
-Exposes UIView corner-adaptation layout region insets (iOS 26+) to Flutter so
-widgets can avoid floating-window controls and rounded display corners.
+Exposes UIView corner-adaptation layout region insets (iPadOS 26+) to Flutter so
+widgets can avoid floating-window controls and rounded display corners on iPad.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }

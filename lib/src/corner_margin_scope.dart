@@ -46,10 +46,13 @@ class _CornerMarginScopeState extends State<CornerMarginScope> {
     // Belt-and-braces bootstrap: the first event from the stream can be
     // delayed (the Flutter root view may not be laid out yet when the
     // plugin registers). Query once eagerly so the first paint has a value.
-    _platform.getInsets().then((corners) {
-      if (!mounted || corners == _corners) return;
-      setState(() => _corners = corners);
-    }).catchError((_) {});
+    _platform
+        .getInsets()
+        .then((corners) {
+          if (!mounted || corners == _corners) return;
+          setState(() => _corners = corners);
+        })
+        .catchError((_) {});
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -7,12 +9,14 @@ import 'src/corner_insets.dart';
 class MethodChannelCornerAdaptiveSafeArea
     extends CornerAdaptiveSafeAreaPlatform {
   @visibleForTesting
-  final MethodChannel methodChannel =
-      const MethodChannel('corner_adaptive_safe_area');
+  final MethodChannel methodChannel = const MethodChannel(
+    'corner_adaptive_safe_area',
+  );
 
   @visibleForTesting
-  final EventChannel eventChannel =
-      const EventChannel('corner_adaptive_safe_area/insets');
+  final EventChannel eventChannel = const EventChannel(
+    'corner_adaptive_safe_area/insets',
+  );
 
   Stream<CornerInsets>? _stream;
 
@@ -23,16 +27,34 @@ class MethodChannelCornerAdaptiveSafeArea
 
   @override
   Future<CornerInsets> getInsets() async {
-    final result =
-        await methodChannel.invokeMapMethod<String, dynamic>('getInsets');
-    return _parseCornerInsets(result);
+    try {
+      final result = await methodChannel.invokeMapMethod<String, dynamic>(
+        'getInsets',
+      );
+      return _parseCornerInsets(result);
+    } on MissingPluginException {
+      return CornerInsets.zero;
+    }
   }
 
   @override
   Stream<CornerInsets> watchInsets() {
     return _stream ??= eventChannel
         .receiveBroadcastStream()
-        .map<CornerInsets>((event) => _parseCornerInsets(event as Map?))
+        .transform<CornerInsets>(
+          StreamTransformer<dynamic, CornerInsets>.fromHandlers(
+            handleData: (event, sink) {
+              sink.add(_parseCornerInsets(event as Map?));
+            },
+            handleError: (error, stackTrace, sink) {
+              if (error is MissingPluginException) {
+                sink.add(CornerInsets.zero);
+                return;
+              }
+              sink.addError(error, stackTrace);
+            },
+          ),
+        )
         .asBroadcastStream();
   }
 

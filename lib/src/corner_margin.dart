@@ -12,11 +12,7 @@ import 'corner_insets.dart';
 /// need a specific corner's raw values (e.g. sizing an `AppBar.leadingWidth`
 /// from `CornerMargin.of(context).topLeft.left`).
 class CornerMargin extends InheritedWidget {
-  const CornerMargin({
-    super.key,
-    required this.corners,
-    required super.child,
-  });
+  const CornerMargin({super.key, required this.corners, required super.child});
 
   final CornerInsets corners;
 

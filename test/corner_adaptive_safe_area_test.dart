@@ -27,17 +27,20 @@ Widget _host({required CornerInsets corners, required Widget child}) {
 
 EdgeInsetsGeometry _firstCornerAdaptivePadding(WidgetTester tester) {
   return tester
-      .widgetList<Padding>(find.descendant(
-        of: find.byType(CornerAdaptiveSafeArea),
-        matching: find.byType(Padding),
-      ))
+      .widgetList<Padding>(
+        find.descendant(
+          of: find.byType(CornerAdaptiveSafeArea),
+          matching: find.byType(Padding),
+        ),
+      )
       .first
       .padding;
 }
 
 void main() {
-  testWidgets('widget filling the window folds all four corners',
-      (tester) async {
+  testWidgets('widget filling the window folds all four corners', (
+    tester,
+  ) async {
     await _pumpWithSurface(
       tester,
       _host(
@@ -56,8 +59,9 @@ void main() {
     );
   });
 
-  testWidgets('widget inside a single quadrant only folds that corner',
-      (tester) async {
+  testWidgets('widget inside a single quadrant only folds that corner', (
+    tester,
+  ) async {
     await _pumpWithSurface(
       tester,
       _host(
